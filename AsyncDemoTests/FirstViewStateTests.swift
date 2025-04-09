@@ -23,11 +23,11 @@ final class FirstViewStateTests: XCTestCase {
     }
 
     override func tearDownWithError() throws {
-        sut = nil
         try super.tearDownWithError()
+        sut = nil
     }
     
-    // MARK: - FetchRandomNumber Tests
+    // MARK: - 数字の取得のテスト
     
     func testFetchRandomNumberButtonWithCheckedContinuation() async throws {
         func test() async throws {
@@ -66,7 +66,7 @@ final class FirstViewStateTests: XCTestCase {
         }
     }
 
-    func testFetchRandomNumberButtonTappedWithTaskYield() async throws {
+    func testFetchRandomNumberButtonTappedWithMainSerialExecutor() async throws {
         
         func test() async throws {
             // MARK: Given
@@ -92,7 +92,8 @@ final class FirstViewStateTests: XCTestCase {
         }
         
         for _ in 0..<1000 {
-            // withMainSerialExecutorをコメントアウトして実行すると、テスト内の順番が不安定になって失敗する事がわかる
+            // withMainSerialExecutor: すべてメインで実行させることでテスト内の処理の順番を固定させている、みたい
+            // これをコメントアウトして実行すると、処理の順番が不安定になって失敗する事がわかる
             try await withMainSerialExecutor {
                 try await test()
             }

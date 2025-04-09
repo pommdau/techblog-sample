@@ -82,13 +82,7 @@ struct SecondView: View {
                     }
                 } else {
                     Button("Fetch Ramdom Number") {
-                        Task {
-                            do {
-                                try await state.fetchRandomNumberButtonTapped()
-                            } catch {
-                                print(error.localizedDescription)
-                            }
-                        }
+                        state.fetchRandomNumberButtonTapped()
                     }
                 }
             }

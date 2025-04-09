@@ -23,43 +23,16 @@ final class SecondViewStateTests: XCTestCase {
     }
 
     override func tearDownWithError() throws {
-        sut = nil
         try super.tearDownWithError()
-    }
-
-    /// キャンセルなし, withMainSerialExecutor
-    func testFetchRandomNumberButtonTapped() async throws {
-        
-        func test() async throws {
-            // MARK: Given
-            let testNumber = Int.random(in: 0...100)
-            let apiClientMock = APIClientStubWithTaskYield()
-            await apiClientMock.setRandomNumber(testNumber)
-            sut = SecondViewState(apiClient: apiClientMock)
-            XCTAssertNil(sut.number)
-            
-            // MARK: When
-            sut.fetchRandomNumberButtonTapped()
-            
-            // MARK: Then
-            await Task.yield()
-            XCTAssertTrue(sut.isConnecting)
-            try await sut.fetchRandomNumberTask?.value
-            XCTAssertFalse(sut.isConnecting)
-            XCTAssertEqual(sut.number, testNumber)
-        }
-        
-        for _ in 0..<1000 {
-            try await withMainSerialExecutor {
-                try await test()
-            }
-        }
+        sut = nil
     }
     
-    /// キャンセルなし, continuation
-    func testFetchRandomNumberButtonTapped2() async throws {
+    // MARK: - 数字の取得のテスト
+    
+    func testFetchRandomNumberButtonTappedWithContinuation() async throws {
         
         func test() async throws {
+            
             // MARK: Given
             let testNumber = Int.random(in: 0...10000)
             let apiClientMock = APIClientStubWithCheckedContinuation()
@@ -67,19 +40,20 @@ final class SecondViewStateTests: XCTestCase {
             XCTAssertNil(sut.number)
             
             // MARK: When
-            sut.fetchRandomNumberButtonTapped()
+            sut.fetchRandomNumberButtonTapped() // awaitメソッドではなくTaskのプロパティを持って管理している
+            
+            // MARK: Then
             while await apiClientMock.fetchRandomNumberContinuation == nil {
                 await Task.yield()
             }
-            
-            // MARK: Then
             XCTAssertTrue(sut.isConnecting)
             
+            // APIの実行
             await apiClientMock.fetchRandomNumberContinuation?.resume(returning: testNumber)
             await apiClientMock.setFetchRandomNumberContinuation(nil)
+            try await sut.fetchRandomNumberTask?.value // Taskの完了まで待つ
             
-            try await sut.fetchRandomNumberTask?.value
-            
+            // 操作完了後の状態確認
             XCTAssertFalse(sut.isConnecting)
             XCTAssertEqual(sut.number, testNumber)
         }
@@ -91,9 +65,7 @@ final class SecondViewStateTests: XCTestCase {
         }
     }
     
-    // MARK: - Cancel
-    
-    func testFetchRandomNumberButtonTappedAndCancelButtonTapped() async throws {
+    func testFetchRandomNumberButtonTappedWithMainSerialExecutor() async throws {
         
         func test() async throws {
             // MARK: Given
@@ -104,34 +76,34 @@ final class SecondViewStateTests: XCTestCase {
             XCTAssertNil(sut.number)
             
             // MARK: When
-            try sut.fetchRandomNumberButtonTapped()
+            sut.fetchRandomNumberButtonTapped()
             
             // MARK: Then
-            await Task.yield()
+//            await Task.yield()
             XCTAssertTrue(sut.isConnecting)
+            try await sut.fetchRandomNumberTask?.value
             
-            sut.handleCancelButtonTapped()
-            
-            _ = try await sut.fetchRandomNumberTask?.value
-            
-            print("🐱: \(sut.error?.localizedDescription)")
+            // 操作完了後の状態確認
             XCTAssertFalse(sut.isConnecting)
-            XCTAssertNil(sut.number)
+            XCTAssertEqual(sut.number, testNumber)
         }
         
-        for _ in 0..<1 {
+        for _ in 0..<1000 {
             try await withMainSerialExecutor {
                 try await test()
             }
         }
     }
     
-    /// キャンセル, continuation
-    func testFetchRandomNumberButtonTappedAndCancelButtonTapped2() async throws {
+    
+    
+    // MARK: - 数字の取得+キャンセルのテスト
+        
+    /// 数字の取得とキャンセルのテスト+continuation
+    func testFetchAndCancelWithContinuation() async throws {
         
         func test() async throws {
             // MARK: Given
-            let testNumber = Int.random(in: 0...10000)
             let apiClientMock = APIClientStubWithCheckedContinuation()
             sut = SecondViewState(apiClient: apiClientMock)
             XCTAssertNil(sut.number)
@@ -145,11 +117,13 @@ final class SecondViewStateTests: XCTestCase {
             // MARK: Then
             XCTAssertTrue(sut.isConnecting)
             
-            let fetchRandomNumberTask = sut.fetchRandomNumberTask // sut側のfetchRandomNumberTaskはキャンセル後にnilになってしまいテストできなくなるため、テスト側で参照を保持させる
+            // sut側のfetchRandomNumberTaskはキャンセル後にnilになってしまいテストできなくなるため、テスト側で参照を保持させる
+            let fetchRandomNumberTask = sut.fetchRandomNumberTask
+            
             sut.handleCancelButtonTapped()
             await apiClientMock.fetchRandomNumberContinuation?.resume(throwing: CancellationError())
             await apiClientMock.setFetchRandomNumberContinuation(nil)
-            _ = try await fetchRandomNumberTask?.result // キャンセル時の処理が完了するまで待つ
+            _ = await fetchRandomNumberTask?.result // キャンセル時の処理が完了するまで待つ
             
             XCTAssertFalse(sut.isConnecting)
             XCTAssertNil(sut.number)
@@ -158,6 +132,40 @@ final class SecondViewStateTests: XCTestCase {
         
         for _ in 0..<100 {
             try await test()
+        }
+    }
+    
+    /// 数字の取得とキャンセルのテスト+WithMainSerialExecutor
+    func testFetchAndCancelWithMainSerialExecutor() async throws {
+        
+        func test() async throws {
+            // MARK: Given
+            let testNumber = Int.random(in: 0...100)
+            let apiClientMock = APIClientStubWithTaskYield()
+            await apiClientMock.setRandomNumber(testNumber)
+            sut = SecondViewState(apiClient: apiClientMock)
+            XCTAssertNil(sut.number)
+            
+            // MARK: When
+            sut.fetchRandomNumberButtonTapped()
+            
+            // MARK: Then
+            XCTAssertTrue(sut.isConnecting)
+            
+            let fetchRandomNumberTask = sut.fetchRandomNumberTask // sut側のfetchRandomNumberTaskはキャンセル後にnilになってしまいテストできなくなるため、テスト側で参照を保持させる
+            sut.handleCancelButtonTapped()
+            _ = await fetchRandomNumberTask?.result
+            
+            // 操作完了後の状態確認
+            XCTAssertFalse(sut.isConnecting)
+            XCTAssertNil(sut.number)
+            XCTAssertNotNil(sut.error)
+        }
+        
+        for _ in 0..<1000 {
+            try await withMainSerialExecutor {
+                try await test()
+            }
         }
     }
 }

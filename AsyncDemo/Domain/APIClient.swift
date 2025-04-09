@@ -27,21 +27,6 @@ final actor APIClient: APIClientProtocol {
 
 // MARK: - Stub
 
-final actor APIClientStubWithTaskYield: APIClientProtocol {
-    
-    var randomNumber: Int = .zero
-    
-    // テスト側から返り値を指定できるようにする
-    func setRandomNumber(_ randomNumber: Int) {
-        self.randomNumber = randomNumber
-    }
-    
-    func fetchRandomNumber() async throws -> Int {
-        await Task.yield()
-        return randomNumber
-    }
-}
-
 final actor APIClientStubWithCheckedContinuation: APIClientProtocol {
     
     var fetchRandomNumberContinuation: CheckedContinuation<Int, Error>?
@@ -57,3 +42,20 @@ final actor APIClientStubWithCheckedContinuation: APIClientProtocol {
     }
 }
 
+final actor APIClientStubWithTaskYield: APIClientProtocol {
+    
+    var randomNumber: Int = .zero
+    
+    // テスト側から返り値を指定できるようにする
+    func setRandomNumber(_ randomNumber: Int) {
+        self.randomNumber = randomNumber
+    }
+    
+    func fetchRandomNumber() async throws -> Int {
+        await Task.yield()
+        if Task.isCancelled {
+            throw CancellationError()
+        }
+        return randomNumber
+    }
+}
