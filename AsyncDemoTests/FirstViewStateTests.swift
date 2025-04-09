@@ -10,7 +10,7 @@ import XCTest
 import ConcurrencyExtras
 
 @MainActor
-final class ViewModelTestTests: XCTestCase {
+final class FirstViewStateTests: XCTestCase {
     
     // MARK: - Properties
         

@@ -24,7 +24,6 @@ final class FirstViewState {
     
     func fetchRandomNumberButtonTapped() async throws {
         isConnecting = true
-        print("isConnecting = true")
         defer {
             isConnecting = false
         }
