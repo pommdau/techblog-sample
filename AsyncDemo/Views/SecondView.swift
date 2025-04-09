@@ -56,7 +56,7 @@ final class SecondViewState {
     
     func handleCancelButtonTapped() {
         fetchRandomNumberTask?.cancel()
-//        fetchRandomNumberTask = nil
+        fetchRandomNumberTask = nil
     }
     
     init(apiClient: APIClientProtocol = APIClient.shared) {

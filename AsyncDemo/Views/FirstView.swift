@@ -7,13 +7,17 @@
 
 import SwiftUI
 
+// MARK: - ViewState
+
 @MainActor
 @Observable
 final class FirstViewState {
     
-    let apiClient: APIClientProtocol
+    // MARK: - Property
+    
+    private let apiClient: APIClientProtocol
     private(set) var number: Int?
-    private(set) var isConnecting: Bool = false
+    private(set) var isConnecting = false // 通信中のフラグ
     
     var numberLabel: String {
         guard let number else {
@@ -21,6 +25,14 @@ final class FirstViewState {
         }
         return "\(number)"
     }
+        
+    // MARK: - LifeCycle
+    
+    init(apiClient: APIClientProtocol = APIClient.shared) {
+        self.apiClient = apiClient
+    }
+    
+    // MARK: - Actions
     
     func fetchRandomNumberButtonTapped() async throws {
         isConnecting = true
@@ -29,11 +41,9 @@ final class FirstViewState {
         }
         number = try await apiClient.fetchRandomNumber()
     }
-    
-    init(apiClient: APIClientProtocol = APIClient.shared) {
-        self.apiClient = apiClient
-    }
 }
+
+// MARK: - View
 
 struct FirstView: View {
     

@@ -4,3 +4,5 @@
 [Task.sleep() vs. Task.yield(): The differences explained](https://www.avanderlee.com/concurrency/task-sleep-vs-yield-differences/)
 
 [[Swift] 不安定なConcurrencyのテストをContinuationとClockで解決する](https://zenn.dev/kntk/articles/2e8d1925b0bb6b)
+
+[(39) iOSDC Japan 2022: Swift Concurrency時代のiOSアプリの作り方 / Yuta Koshizawa - YouTube](https://www.youtube.com/watch?v=kvpsphJm9lE&ab_channel=iOSDCJapan)

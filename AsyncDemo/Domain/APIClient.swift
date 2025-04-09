@@ -7,9 +7,13 @@
 
 import Foundation
 
+// MARK: - Protocol
+
 protocol APIClientProtocol: Actor {
     func fetchRandomNumber() async throws -> Int
 }
+
+// MARK: - Implement
 
 final actor APIClient: APIClientProtocol {
     
@@ -17,13 +21,13 @@ final actor APIClient: APIClientProtocol {
     
     func fetchRandomNumber() async throws -> Int {
         try await Task.sleep(for: .seconds(1)) // Heavy Task
-//        await Task.yield()
-//        try await Task.sleep(for: .seconds(1))
         return Int.random(in: 1...100)
     }
 }
 
-final actor APIClientMock1: APIClientProtocol {
+// MARK: - Stub
+
+final actor APIClientStubWithTaskYield: APIClientProtocol {
     
     var randomNumber: Int = .zero // テスト側から返り値を指定できるようにする
     
@@ -37,7 +41,7 @@ final actor APIClientMock1: APIClientProtocol {
     }
 }
 
-final actor APIClientMock2: APIClientProtocol {
+final actor APIClientStubWithCheckedContinuation: APIClientProtocol {
     
     var fetchRandomNumberContinuation: CheckedContinuation<Int, Error>?
     
@@ -51,3 +55,4 @@ final actor APIClientMock2: APIClientProtocol {
         }
     }
 }
+

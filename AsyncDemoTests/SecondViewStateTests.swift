@@ -33,7 +33,7 @@ final class SecondViewStateTests: XCTestCase {
         func test() async throws {
             // MARK: Given
             let testNumber = Int.random(in: 0...100)
-            let apiClientMock = APIClientMock1()
+            let apiClientMock = APIClientStubWithTaskYield()
             await apiClientMock.setRandomNumber(testNumber)
             sut = SecondViewState(apiClient: apiClientMock)
             XCTAssertNil(sut.number)
@@ -62,7 +62,7 @@ final class SecondViewStateTests: XCTestCase {
         func test() async throws {
             // MARK: Given
             let testNumber = Int.random(in: 0...10000)
-            let apiClientMock = APIClientMock2()
+            let apiClientMock = APIClientStubWithCheckedContinuation()
             sut = SecondViewState(apiClient: apiClientMock)
             XCTAssertNil(sut.number)
             
@@ -98,7 +98,7 @@ final class SecondViewStateTests: XCTestCase {
         func test() async throws {
             // MARK: Given
             let testNumber = Int.random(in: 0...100)
-            let apiClientMock = APIClientMock1()
+            let apiClientMock = APIClientStubWithTaskYield()
             await apiClientMock.setRandomNumber(testNumber)
             sut = SecondViewState(apiClient: apiClientMock)
             XCTAssertNil(sut.number)
@@ -123,6 +123,41 @@ final class SecondViewStateTests: XCTestCase {
             try await withMainSerialExecutor {
                 try await test()
             }
+        }
+    }
+    
+    /// キャンセル, continuation
+    func testFetchRandomNumberButtonTappedAndCancelButtonTapped2() async throws {
+        
+        func test() async throws {
+            // MARK: Given
+            let testNumber = Int.random(in: 0...10000)
+            let apiClientMock = APIClientStubWithCheckedContinuation()
+            sut = SecondViewState(apiClient: apiClientMock)
+            XCTAssertNil(sut.number)
+            
+            // MARK: When
+            sut.fetchRandomNumberButtonTapped()
+            while await apiClientMock.fetchRandomNumberContinuation == nil {
+                await Task.yield()
+            }
+            
+            // MARK: Then
+            XCTAssertTrue(sut.isConnecting)
+            
+            let fetchRandomNumberTask = sut.fetchRandomNumberTask // sut側のfetchRandomNumberTaskはキャンセル後にnilになってしまいテストできなくなるため、テスト側で参照を保持させる
+            sut.handleCancelButtonTapped()
+            await apiClientMock.fetchRandomNumberContinuation?.resume(throwing: CancellationError())
+            await apiClientMock.setFetchRandomNumberContinuation(nil)
+            _ = try await fetchRandomNumberTask?.result // キャンセル時の処理が完了するまで待つ
+            
+            XCTAssertFalse(sut.isConnecting)
+            XCTAssertNil(sut.number)
+            XCTAssertNotNil(sut.error)
+        }
+        
+        for _ in 0..<100 {
+            try await test()
         }
     }
 }
