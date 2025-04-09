@@ -56,4 +56,38 @@ final class ViewModelTestTests: XCTestCase {
             }
         }
     }
+    
+    func testFetchRandomNumberButtonTapped2() async throws {
+        
+        func test() async throws {
+            
+            // MARK: Given
+            let testNumber = Int.random(in: 0...10000)
+            let apiClientMock = APIClientMock2()
+            sut = FirstViewState(apiClient: apiClientMock)
+            XCTAssertNil(sut.number)
+            
+            // MARK: When
+            async let fetchRandomNumber: Void = sut.fetchRandomNumberButtonTapped()
+            while await apiClientMock.fetchRandomNumberContinuation == nil {
+                await Task.yield()
+            }
+            
+            // MARK: Then
+            XCTAssertTrue(sut.isConnecting)
+            
+            // APIの実行
+            await apiClientMock.fetchRandomNumberContinuation?.resume(returning: testNumber)
+            await apiClientMock.setFetchRandomNumberContinuation(nil)
+            try await fetchRandomNumber
+                        
+            XCTAssertFalse(sut.isConnecting)
+            XCTAssertEqual(sut.number, testNumber)
+            print(testNumber)
+        }
+        
+        for _ in 0..<1 {
+            try await test()
+        }
+    }
 }

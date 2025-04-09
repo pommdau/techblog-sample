@@ -11,7 +11,7 @@ import SwiftUI
 @Observable
 final class FirstViewState {
     
-    private let apiClient: APIClientProtocol
+    let apiClient: APIClientProtocol
     private(set) var number: Int?
     private(set) var isConnecting: Bool = false
     
@@ -23,7 +23,9 @@ final class FirstViewState {
     }
     
     func fetchRandomNumberButtonTapped() async throws {
+        try await Task.sleep(for: .seconds(1))
         isConnecting = true
+        print("isConnecting = true")
         defer {
             isConnecting = false
         }

@@ -39,10 +39,15 @@ final actor APIClientMock1: APIClientProtocol {
 
 final actor APIClientMock2: APIClientProtocol {
     
-    var randomNumber: Int = .zero // テスト側から返り値を指定できるようにする
+    var fetchRandomNumberContinuation: CheckedContinuation<Int, Error>?
     
+    func setFetchRandomNumberContinuation(_ fetchRandomNumberContinuation: CheckedContinuation<Int, Error>?) {
+        self.fetchRandomNumberContinuation = fetchRandomNumberContinuation
+    }
+            
     func fetchRandomNumber() async throws -> Int {
-        try await Task.sleep(for: .nanoseconds(1))
-        return randomNumber
+        try await withCheckedThrowingContinuation { continuation in
+            fetchRandomNumberContinuation = continuation
+        }
     }
 }
