@@ -27,6 +27,7 @@ final actor APIClient: APIClientProtocol {
 
 // MARK: - Stub
 
+/// CheckedContnuationをつかったStub
 final actor APIClientStubWithCheckedContinuation: APIClientProtocol {
     
     var fetchRandomNumberContinuation: CheckedContinuation<Int, Error>?
@@ -42,6 +43,7 @@ final actor APIClientStubWithCheckedContinuation: APIClientProtocol {
     }
 }
 
+/// Task.yield()をつかったStub
 final actor APIClientStubWithTaskYield: APIClientProtocol {
     
     var randomNumber: Int = .zero
@@ -52,10 +54,14 @@ final actor APIClientStubWithTaskYield: APIClientProtocol {
     }
     
     func fetchRandomNumber() async throws -> Int {
-        await Task.yield()
+        await Task.yield() // 実行を1サイクル遅らせる
+        
+        // タスクがキャンセルされている場合は例外を投げる
+        // Task.sleepやURLSessionの通信はキャンセル処理(CancellationErrorを投げる)が実装されていると思われるので、その代替の処理としてキャンセルチェックが必要
         if Task.isCancelled {
             throw CancellationError()
         }
+        
         return randomNumber
     }
 }

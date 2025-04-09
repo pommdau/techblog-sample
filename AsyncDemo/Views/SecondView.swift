@@ -7,23 +7,18 @@
 
 import SwiftUI
 
-//
-//  FirstView.swift
-//  AsyncDemo
-//
-//  Created by HIROKI IKEUCHI on 2025/04/09.
-//
-
-import SwiftUI
+// MARK: - ViewState
 
 @MainActor
 @Observable
 final class SecondViewState {
     
-    let apiClient: APIClientProtocol
-    private(set) var fetchRandomNumberTask: Task<(), Error>?
+    // MARK: - Property
+    
+    private let apiClient: APIClientProtocol
     private(set) var number: Int?
-    private(set) var isConnecting: Bool = false
+    private(set) var fetchRandomNumberTask: Task<(), Error>?
+    private(set) var isProcessing = false
     private(set) var error: Error?
     
     var numberLabel: String {
@@ -33,12 +28,21 @@ final class SecondViewState {
         return "\(number)"
     }
     
+    // MARK: - LifeCycle
+    
+    init(apiClient: APIClientProtocol = APIClient.shared) {
+        self.apiClient = apiClient
+    }
+    
+    // MARK: - Actions
+    
+    /// ランダムな番号を取得するボタンが押された
     func fetchRandomNumberButtonTapped() {
+        isProcessing = true
         error = nil
-        isConnecting = true
         fetchRandomNumberTask = Task {
             defer {
-                isConnecting = false
+                isProcessing = false
             }
             do {
                 number = try await apiClient.fetchRandomNumber()
@@ -47,22 +51,20 @@ final class SecondViewState {
                     number = nil
                     self.error = MessageError(description: error.localizedDescription)
                 } else {
-                    number = nil
-                    self.error = MessageError(description: error.localizedDescription)
+                    fatalError("unimplemented")
                 }
             }
         }
     }
     
-    func handleCancelButtonTapped() {
-        fetchRandomNumberTask?.cancel()
-        fetchRandomNumberTask = nil
-    }
-    
-    init(apiClient: APIClientProtocol = APIClient.shared) {
-        self.apiClient = apiClient
-    }
+/// キャンセルボタンが押された
+func handleCancelButtonTapped() {
+    fetchRandomNumberTask?.cancel()
+    fetchRandomNumberTask = nil
 }
+}
+
+// MARK: - View
 
 struct SecondView: View {
     
@@ -73,7 +75,7 @@ struct SecondView: View {
             LabeledContent("Number", value: "\(state.numberLabel)")
             LabeledContent("Error", value: "\(state.error?.localizedDescription ?? "(no error)")")
             ZStack {
-                if state.isConnecting {
+                if state.isProcessing {
                     HStack {
                         ProgressView()
                         Button("Cancel") {

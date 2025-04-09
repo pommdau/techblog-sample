@@ -13,15 +13,15 @@ import ConcurrencyExtras
 final class FirstViewStateTests: XCTestCase {
     
     // MARK: - Properties
-        
+    
     private var sut: FirstViewState!
-
+    
     // MARK: - Setup/TearDown
     
     override func setUpWithError() throws {
         try super.setUpWithError()
     }
-
+    
     override func tearDownWithError() throws {
         try super.tearDownWithError()
         sut = nil
@@ -30,6 +30,7 @@ final class FirstViewStateTests: XCTestCase {
     // MARK: - 数字の取得のテスト
     
     func testFetchRandomNumberButtonWithCheckedContinuation() async throws {
+        
         func test() async throws {
             // MARK: Given
             let testNumber = Int.random(in: 0...10000)
@@ -47,16 +48,16 @@ final class FirstViewStateTests: XCTestCase {
             while await apiClientStub.fetchRandomNumberContinuation == nil {
                 await Task.yield()
             }
-            XCTAssertTrue(sut.isConnecting) // 通信中フラグの確認
+            XCTAssertTrue(sut.isProcessing) // 通信中フラグの確認
             
             // APIの実行
             // continuationにより任意のタイミングで発火させられる
             await apiClientStub.fetchRandomNumberContinuation?.resume(returning: testNumber)
             await apiClientStub.setFetchRandomNumberContinuation(nil)
             try await fetchRandomNumber // awaitの処理の完了を待つ(= try await apiClient.fetchRandomNumber())
-                        
+            
             // 操作完了後の状態確認
-            XCTAssertFalse(sut.isConnecting)
+            XCTAssertFalse(sut.isProcessing)
             XCTAssertEqual(sut.number, testNumber)
         }
         
@@ -65,7 +66,7 @@ final class FirstViewStateTests: XCTestCase {
             try await test()
         }
     }
-
+    
     func testFetchRandomNumberButtonTappedWithMainSerialExecutor() async throws {
         
         func test() async throws {
@@ -83,11 +84,11 @@ final class FirstViewStateTests: XCTestCase {
             }
             // MARK: Then
             await Task.yield() // fetchRandomNumber()内のTask.yield()の直前までタイミングをずらす
-            XCTAssertTrue(sut.isConnecting)
+            XCTAssertTrue(sut.isProcessing)
             _ = try await task.value // 処理の完了を待つ
             
             // 操作完了後の状態確認
-            XCTAssertFalse(sut.isConnecting)
+            XCTAssertFalse(sut.isProcessing)
             XCTAssertEqual(sut.number, testNumber)
         }
         

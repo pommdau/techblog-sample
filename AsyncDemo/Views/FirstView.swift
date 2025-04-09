@@ -17,7 +17,7 @@ final class FirstViewState {
     
     private let apiClient: APIClientProtocol
     private(set) var number: Int?
-    private(set) var isConnecting = false // 通信中のフラグ
+    private(set) var isProcessing = false // 通信中のフラグ
     
     var numberLabel: String {
         guard let number else {
@@ -35,9 +35,9 @@ final class FirstViewState {
     // MARK: - Actions
     
     func fetchRandomNumberButtonTapped() async throws {
-        isConnecting = true
+        isProcessing = true
         defer {
-            isConnecting = false
+            isProcessing = false
         }
         number = try await apiClient.fetchRandomNumber()
     }
@@ -53,7 +53,7 @@ struct FirstView: View {
         Form {
             LabeledContent("Number", value: "\(state.numberLabel)")
             ZStack {
-                if state.isConnecting {
+                if state.isProcessing {
                     ProgressView()
                 } else {
                     Button("Fetch Ramdom Number") {
