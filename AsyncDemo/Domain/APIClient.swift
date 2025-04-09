@@ -29,8 +29,9 @@ final actor APIClient: APIClientProtocol {
 
 final actor APIClientStubWithTaskYield: APIClientProtocol {
     
-    var randomNumber: Int = .zero // テスト側から返り値を指定できるようにする
+    var randomNumber: Int = .zero
     
+    // テスト側から返り値を指定できるようにする
     func setRandomNumber(_ randomNumber: Int) {
         self.randomNumber = randomNumber
     }

@@ -69,33 +69,33 @@ final class FirstViewStateTests: XCTestCase {
     func testFetchRandomNumberButtonTappedWithTaskYield() async throws {
         
         func test() async throws {
-            try await withMainSerialExecutor {
-                // MARK: Given
-                let testNumber = Int.random(in: 0...10000)
-                let apiClientStub = APIClientStubWithTaskYield()
-                await apiClientStub.setRandomNumber(testNumber)
-                sut = FirstViewState(apiClient: apiClientStub)
-                XCTAssertNil(sut.number)
-                
-                // MARK: When
-                // ここは最終的に上述のテストのasync letとやっていることは同じことのはず(async letでも動作することは確認済み)
-                let task = Task {
-                    try await sut.fetchRandomNumberButtonTapped()
-                }
-                // MARK: Then
-                await Task.yield() // fetchRandomNumber()内のTask.yield()の直前までタイミングをずらす
-                XCTAssertTrue(sut.isConnecting)
-                _ = try await task.value // 処理の完了を待つ
-                
-                // 操作完了後の状態確認
-                XCTAssertFalse(sut.isConnecting)
-                XCTAssertEqual(sut.number, testNumber)
+            // MARK: Given
+            let testNumber = Int.random(in: 0...10000)
+            let apiClientStub = APIClientStubWithTaskYield()
+            await apiClientStub.setRandomNumber(testNumber)
+            sut = FirstViewState(apiClient: apiClientStub)
+            XCTAssertNil(sut.number)
+            
+            // MARK: When
+            // ここは最終的に上述のテストのasync letとやっていることは同じことのはず(async letでも動作することは確認済み)
+            let task = Task {
+                try await sut.fetchRandomNumberButtonTapped()
             }
+            // MARK: Then
+            await Task.yield() // fetchRandomNumber()内のTask.yield()の直前までタイミングをずらす
+            XCTAssertTrue(sut.isConnecting)
+            _ = try await task.value // 処理の完了を待つ
+            
+            // 操作完了後の状態確認
+            XCTAssertFalse(sut.isConnecting)
+            XCTAssertEqual(sut.number, testNumber)
         }
         
         for _ in 0..<1000 {
-            try await test()
-            
+            // withMainSerialExecutorをコメントアウトして実行すると、テスト内の順番が不安定になって失敗する事がわかる
+            try await withMainSerialExecutor {
+                try await test()
+            }
         }
     }
 }
