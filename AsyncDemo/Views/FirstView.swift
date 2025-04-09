@@ -23,7 +23,6 @@ final class FirstViewState {
     }
     
     func fetchRandomNumberButtonTapped() async throws {
-        try await Task.sleep(for: .seconds(1))
         isConnecting = true
         print("isConnecting = true")
         defer {

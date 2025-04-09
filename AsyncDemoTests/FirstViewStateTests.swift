@@ -86,7 +86,7 @@ final class ViewModelTestTests: XCTestCase {
             print(testNumber)
         }
         
-        for _ in 0..<1 {
+        for _ in 0..<1000 {
             try await test()
         }
     }
