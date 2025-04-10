@@ -25,7 +25,7 @@ final class FirstViewState {
         }
         return "\(number)"
     }
-        
+    
     // MARK: - LifeCycle
     
     init(apiClient: APIClientProtocol = APIClient.shared) {

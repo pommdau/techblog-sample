@@ -35,7 +35,7 @@ final actor APIClientStubWithCheckedContinuation: APIClientProtocol {
     func setFetchRandomNumberContinuation(_ fetchRandomNumberContinuation: CheckedContinuation<Int, Error>?) {
         self.fetchRandomNumberContinuation = fetchRandomNumberContinuation
     }
-            
+    
     func fetchRandomNumber() async throws -> Int {
         try await withCheckedThrowingContinuation { continuation in
             fetchRandomNumberContinuation = continuation

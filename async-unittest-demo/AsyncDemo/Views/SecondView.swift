@@ -57,11 +57,11 @@ final class SecondViewState {
         }
     }
     
-/// キャンセルボタンが押された
-func handleCancelButtonTapped() {
-    fetchRandomNumberTask?.cancel()
-    fetchRandomNumberTask = nil
-}
+    /// キャンセルボタンが押された
+    func handleCancelButtonTapped() {
+        fetchRandomNumberTask?.cancel()
+        fetchRandomNumberTask = nil
+    }
 }
 
 // MARK: - View
