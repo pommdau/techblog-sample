@@ -1,5 +1,5 @@
-query GetRepos($username: String!) {
-  user(login: $username) {
+query FetchUserRepos($login: String!) {
+  user(login: $login) {
     repositories(first: 10) {
       nodes {
         ...RepositoryFields

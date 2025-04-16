@@ -4,21 +4,21 @@
 @_exported import ApolloAPI
 
 extension GitHubGraphQLAPI {
-  class GetReposQuery: GraphQLQuery {
-    static let operationName: String = "GetRepos"
+  class FetchUserReposQuery: GraphQLQuery {
+    static let operationName: String = "FetchUserRepos"
     static let operationDocument: ApolloAPI.OperationDocument = .init(
       definition: .init(
-        #"query GetRepos($username: String!) { user(login: $username) { __typename repositories(first: 10) { __typename nodes { __typename ...RepositoryFields } } } }"#,
+        #"query FetchUserRepos($login: String!) { user(login: $login) { __typename repositories(first: 10) { __typename nodes { __typename ...RepositoryFields } } } }"#,
         fragments: [LanguageFields.self, RepositoryFields.self]
       ))
 
-    public var username: String
+    public var login: String
 
-    public init(username: String) {
-      self.username = username
+    public init(login: String) {
+      self.login = login
     }
 
-    public var __variables: Variables? { ["username": username] }
+    public var __variables: Variables? { ["login": login] }
 
     struct Data: GitHubGraphQLAPI.SelectionSet {
       let __data: DataDict
@@ -26,7 +26,7 @@ extension GitHubGraphQLAPI {
 
       static var __parentType: any ApolloAPI.ParentType { GitHubGraphQLAPI.Objects.Query }
       static var __selections: [ApolloAPI.Selection] { [
-        .field("user", User?.self, arguments: ["login": .variable("username")]),
+        .field("user", User?.self, arguments: ["login": .variable("login")]),
       ] }
 
       /// Lookup a user by login.

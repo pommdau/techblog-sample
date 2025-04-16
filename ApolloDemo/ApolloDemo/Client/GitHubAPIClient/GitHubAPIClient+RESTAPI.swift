@@ -6,26 +6,6 @@
 //
 
 import UIKit
-import Apollo
-
-final actor GitHubAPIClient {
-    
-    static let shared: GitHubAPIClient = .init(
-        clientID: GitHubAPICredentials.clientID,
-        clientSecret: GitHubAPICredentials.clientSecret,
-        callbackURL: URL(string: "apollodemo://callback")!
-    )
-    
-    let clientID: String
-    let clientSecret: String
-    let callbackURL: URL
-    
-    init(clientID: String, clientSecret: String, callbackURL: URL) {
-        self.clientID = clientID
-        self.clientSecret = clientSecret
-        self.callbackURL = callbackURL
-    }
-}
 
 // MARK: - 認証
 
@@ -132,21 +112,4 @@ extension GitHubAPIClient {
             print(error.localizedDescription)
         }
     }
-}
-
-// MARK: - 検索
-
-extension GitHubAPIClient {
-    
-    func searchRepos(query: String, apolloClient: ApolloClient) async throws {
-        // クエリの作成
-        let query = GitHubGraphQLAPI.SearchReposQuery(query: query, after: nil)
-        let data = try await apolloClient.fetch(query: query)
-        let repos = data.search.edges
-        print("stop")
-//        let data = try await apolloClient.fetch(query: query)
-//        let repos = data.user?.repositories.nodes?.compactMap { $0?.fragments.repositoryFields } ?? []
-//        return repos
-    }
-    
 }
