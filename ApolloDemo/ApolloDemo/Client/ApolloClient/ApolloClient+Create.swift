@@ -8,10 +8,6 @@
 import Foundation
 import Apollo
 
-//extension ApolloClient {
-//    static var shared: ApolloClient = ApolloClient.create()        
-//}
-
 // MARK: - Factory Method
 
 extension ApolloClient {
