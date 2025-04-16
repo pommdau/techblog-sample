@@ -33,6 +33,7 @@ struct LoginView: View {
                 Task {
                     do {
                         guard let sessionCode else {
+                            print("Not found sessionCode")
                             return
                         }
                         self.accessToken = try await fetchAccessToken(sessionCode: sessionCode)

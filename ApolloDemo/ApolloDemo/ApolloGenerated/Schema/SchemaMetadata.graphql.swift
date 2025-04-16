@@ -105,6 +105,8 @@ extension GitHubGraphQLAPI {
       case "Label": return GitHubGraphQLAPI.Objects.Label
       case "LabeledEvent": return GitHubGraphQLAPI.Objects.LabeledEvent
       case "Language": return GitHubGraphQLAPI.Objects.Language
+      case "LanguageConnection": return GitHubGraphQLAPI.Objects.LanguageConnection
+      case "LanguageEdge": return GitHubGraphQLAPI.Objects.LanguageEdge
       case "License": return GitHubGraphQLAPI.Objects.License
       case "LinkedBranch": return GitHubGraphQLAPI.Objects.LinkedBranch
       case "LockedEvent": return GitHubGraphQLAPI.Objects.LockedEvent
@@ -165,6 +167,7 @@ extension GitHubGraphQLAPI {
       case "PackageFile": return GitHubGraphQLAPI.Objects.PackageFile
       case "PackageTag": return GitHubGraphQLAPI.Objects.PackageTag
       case "PackageVersion": return GitHubGraphQLAPI.Objects.PackageVersion
+      case "PageInfo": return GitHubGraphQLAPI.Objects.PageInfo
       case "ParentIssueAddedEvent": return GitHubGraphQLAPI.Objects.ParentIssueAddedEvent
       case "ParentIssueRemovedEvent": return GitHubGraphQLAPI.Objects.ParentIssueRemovedEvent
       case "PinnedDiscussion": return GitHubGraphQLAPI.Objects.PinnedDiscussion
@@ -230,6 +233,7 @@ extension GitHubGraphQLAPI {
       case "RepoRemoveMemberAuditEntry": return GitHubGraphQLAPI.Objects.RepoRemoveMemberAuditEntry
       case "RepoRemoveTopicAuditEntry": return GitHubGraphQLAPI.Objects.RepoRemoveTopicAuditEntry
       case "Repository": return GitHubGraphQLAPI.Objects.Repository
+      case "RepositoryConnection": return GitHubGraphQLAPI.Objects.RepositoryConnection
       case "RepositoryInvitation": return GitHubGraphQLAPI.Objects.RepositoryInvitation
       case "RepositoryMigration": return GitHubGraphQLAPI.Objects.RepositoryMigration
       case "RepositoryRule": return GitHubGraphQLAPI.Objects.RepositoryRule
@@ -254,6 +258,7 @@ extension GitHubGraphQLAPI {
       case "SponsorsTier": return GitHubGraphQLAPI.Objects.SponsorsTier
       case "Sponsorship": return GitHubGraphQLAPI.Objects.Sponsorship
       case "SponsorshipNewsletter": return GitHubGraphQLAPI.Objects.SponsorshipNewsletter
+      case "StarredRepositoryConnection": return GitHubGraphQLAPI.Objects.StarredRepositoryConnection
       case "Status": return GitHubGraphQLAPI.Objects.Status
       case "StatusCheckRollup": return GitHubGraphQLAPI.Objects.StatusCheckRollup
       case "StatusContext": return GitHubGraphQLAPI.Objects.StatusContext

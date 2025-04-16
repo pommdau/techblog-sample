@@ -10,10 +10,13 @@ query SearchRepos($query: String!, $first: Int = 10, $after: String) {
       cursor
       node {
         ... on Repository {
-          id
-          name
+          ...RepositoryFields
         }
       }
+    }
+    pageInfo {
+      endCursor
+      hasNextPage
     }
   }
 }
