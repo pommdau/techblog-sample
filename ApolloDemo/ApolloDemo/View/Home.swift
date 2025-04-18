@@ -138,7 +138,7 @@ struct Home: View {
             
             HStack {
                 TextField("Keyword", text: $searchReposInput)
-                Button("Fetch UserRepos") {
+                Button("Search Repos") {
                     Task {
                         do {
                             let repos = try await gitHubAPIClient.searchRepos(query: searchReposInput)
