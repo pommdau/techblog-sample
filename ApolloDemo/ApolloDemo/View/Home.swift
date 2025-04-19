@@ -55,6 +55,7 @@ struct Home: View {
         
     @ViewBuilder
     private func authSection() -> some View {
+        // swiftlint:disable:next closure_body_length
         Section("Auth") {
             LabeledContent("Code", value: sessionCode ?? "(nil)")
             LabeledContent("AccessToken", value: accessToken ?? "(nil)")
@@ -104,6 +105,7 @@ struct Home: View {
     
     @ViewBuilder
     private func actionSection() -> some View {
+        // swiftlint:disable:next closure_body_length
         Section("Action") {
             HStack {
                 TextField("UserName", text: $fetchUserInput)
@@ -118,7 +120,6 @@ struct Home: View {
                     }
                 }
             }
-            
             
             HStack {
                 TextField("UserName", text: $fetchUserReposInput)

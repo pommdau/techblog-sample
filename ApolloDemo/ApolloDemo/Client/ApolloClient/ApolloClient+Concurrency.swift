@@ -57,23 +57,25 @@ extension GraphQLResult {
     }
 }
 
-///// unused now
-//extension ApolloClient {
-//    private func fetchAll<Query: GraphQLQuery>(
-//        query: Query,
-//        cachePolicy: CachePolicy = .default,
-//        contextIdentifier: UUID? = nil,
-//        queue: DispatchQueue = .main
-//    ) async throws -> [Query.Data] {
-//        var values: [Query.Data] = []
-//        for try await result in watch(query: query, cachePolicy: cachePolicy, contextIdentifier: contextIdentifier, queue: queue) {
-//            if let value = result.data {
-//                values.append(value)
-//            }
-//        }
-//        return values
-//    }
-//}
+// unused now
+/*
+extension ApolloClient {
+    private func fetchAll<Query: GraphQLQuery>(
+        query: Query,
+        cachePolicy: CachePolicy = .default,
+        contextIdentifier: UUID? = nil,
+        queue: DispatchQueue = .main
+    ) async throws -> [Query.Data] {
+        var values: [Query.Data] = []
+        for try await result in watch(query: query, cachePolicy: cachePolicy, contextIdentifier: contextIdentifier, queue: queue) {
+            if let value = result.data {
+                values.append(value)
+            }
+        }
+        return values
+    }
+}
+ */
 
 // [Swift Concurrency チートシート](https://zenn.dev/koher/articles/swift-concurrency-cheatsheet#%F0%9F%92%BC-case-6-%28checkedcontinuation%29%3A-%E3%82%B3%E3%83%BC%E3%83%AB%E3%83%90%E3%83%83%E3%82%AF%E3%81%8B%E3%82%89-async-%E3%81%B8%E3%81%AE%E5%A4%89%E6%8F%9B)
 extension ApolloClient {

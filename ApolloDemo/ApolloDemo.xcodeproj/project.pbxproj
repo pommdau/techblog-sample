@@ -7,11 +7,15 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		DA2275C42DB3CE6D006E4121 /* .swiftlint.yml in Resources */ = {isa = PBXBuildFile; fileRef = DA2275C32DB3CE6D006E4121 /* .swiftlint.yml */; };
 		DA5654782DAE0B6900E7A607 /* Apollo in Frameworks */ = {isa = PBXBuildFile; productRef = DA5654772DAE0B6900E7A607 /* Apollo */; };
+		DA88CBDA2DB3D007000D6EE0 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = DA88CBD92DB3D007000D6EE0 /* README.md */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		DA2275C32DB3CE6D006E4121 /* .swiftlint.yml */ = {isa = PBXFileReference; lastKnownFileType = text.yaml; path = .swiftlint.yml; sourceTree = "<group>"; };
 		DA8114CE2DAD21D8002D0D2E /* ApolloDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ApolloDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		DA88CBD92DB3D007000D6EE0 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -50,8 +54,10 @@
 		DA8114C52DAD21D8002D0D2E = {
 			isa = PBXGroup;
 			children = (
+				DA88CBD92DB3D007000D6EE0 /* README.md */,
 				DA8114D02DAD21D8002D0D2E /* ApolloDemo */,
 				DA8114CF2DAD21D8002D0D2E /* Products */,
+				DA2275C32DB3CE6D006E4121 /* .swiftlint.yml */,
 			);
 			sourceTree = "<group>";
 		};
@@ -77,6 +83,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				DA2275C72DB3CE87006E4121 /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
 				DA8114D02DAD21D8002D0D2E /* ApolloDemo */,
@@ -115,6 +122,7 @@
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
 				DA5654762DAE0B6900E7A607 /* XCRemoteSwiftPackageReference "apollo-ios" */,
+				DA2275C52DB3CE7D006E4121 /* XCRemoteSwiftPackageReference "SwiftLint" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = DA8114CF2DAD21D8002D0D2E /* Products */;
@@ -131,6 +139,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DA88CBDA2DB3D007000D6EE0 /* README.md in Resources */,
+				DA2275C42DB3CE6D006E4121 /* .swiftlint.yml in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -145,6 +155,13 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		DA2275C72DB3CE87006E4121 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			productRef = DA2275C62DB3CE87006E4121 /* SwiftLintBuildToolPlugin */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		DA8114D72DAD21DA002D0D2E /* Debug */ = {
@@ -350,6 +367,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		DA2275C52DB3CE7D006E4121 /* XCRemoteSwiftPackageReference "SwiftLint" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/realm/SwiftLint";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.59.1;
+			};
+		};
 		DA5654762DAE0B6900E7A607 /* XCRemoteSwiftPackageReference "apollo-ios" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/apollographql/apollo-ios.git";
@@ -361,6 +386,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		DA2275C62DB3CE87006E4121 /* SwiftLintBuildToolPlugin */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = DA2275C52DB3CE7D006E4121 /* XCRemoteSwiftPackageReference "SwiftLint" */;
+			productName = "plugin:SwiftLintBuildToolPlugin";
+		};
 		DA5654772DAE0B6900E7A607 /* Apollo */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = DA5654762DAE0B6900E7A607 /* XCRemoteSwiftPackageReference "apollo-ios" */;

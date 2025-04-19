@@ -15,6 +15,7 @@ final actor GitHubAPIClient {
     static let shared: GitHubAPIClient = .init(
         clientID: GitHubAPICredentials.clientID,
         clientSecret: GitHubAPICredentials.clientSecret,
+        // swiftlint:disable:next force_unwrapping
         callbackURL: URL(string: "apollodemo://callback")!
     )
     
@@ -22,7 +23,7 @@ final actor GitHubAPIClient {
     let clientSecret: String
     let callbackURL: URL
     
-    private(set) var apollo: ApolloClient = ApolloClient.create()
+    private(set) var apollo: ApolloClient = .create()
         
     // MARK: - LifeCycle
         

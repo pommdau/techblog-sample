@@ -28,7 +28,9 @@ extension GitHubAPIClient {
     
     func fetchAccessToken(sessionCode: String) async throws -> String {
         // リクエストの作成
-        let url = URL(string: "https://github.com/login/oauth/access_token")!
+        guard let url = URL(string: "https://github.com/login/oauth/access_token") else {
+            fatalError("Failed to create URL")
+        }
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
         // ヘッダの設定
