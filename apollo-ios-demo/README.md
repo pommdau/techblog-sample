@@ -9,7 +9,7 @@
 import Foundation
 
 enum GitHubAPICredentials {
-    static let clientID = "<your-client-id>"
+    static let clientID = "your-client-id"
     static let clientSecret = "yout-client-secret"
 }
 ```
