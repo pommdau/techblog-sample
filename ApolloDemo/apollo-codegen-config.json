@@ -1,0 +1,29 @@
+{
+  "schemaNamespace" : "GitHubGraphQLAPI",
+  "input" : {
+    "operationSearchPaths" : [
+      "**/*.graphql"
+    ],
+    "schemaSearchPaths" : [
+      "**/*.graphqls"
+    ]
+  },
+  "output" : {
+    "testMocks" : {
+      "none" : {
+      }
+    },
+    "schemaTypes" : {
+      "path" : "./ApolloDemo/ApolloGenerated",
+      "moduleType" : {
+        "embeddedInTarget" : {
+          "name" : "ApolloDemo"
+        }
+      }
+    },
+    "operations" : {
+      "inSchemaModule" : {
+      }
+    }
+  }
+}

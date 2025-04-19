@@ -1,0 +1,9 @@
+query FetchUserRepos($login: String!) {
+  user(login: $login) {
+    repositories(first: 10) {
+      nodes {
+        ...RepositoryFields
+      }
+    }
+  }
+}
