@@ -113,6 +113,7 @@ struct LeatherView: View {
                 }
             stitchParameterForm()
         }
+        .shadow(color: .black.opacity(0.5), radius: 4, x: 0, y: 8)
         .ignoresSafeArea()
     }
 }
@@ -172,7 +173,7 @@ extension LeatherView {
                             )
                         // 下部の影
                             .shadow(
-                                ShadowStyle.inner(color: .white.opacity(0.8), radius: 4, x: 0, y: 8)
+                                ShadowStyle.inner(color: .white.opacity(0.5), radius: 8, x: 0, y: 6)
                             )
                     )
                     .frame(width: leatherSize.width, height: leatherSize.height)
